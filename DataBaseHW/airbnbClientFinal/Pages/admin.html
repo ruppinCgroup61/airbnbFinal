@@ -1,0 +1,231 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+
+
+    <title>DataTable Example</title>
+
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css">
+
+    <style type="text/css">
+
+        button {
+            margin-left: 10px;
+        }
+
+        .colorDiv {
+            height: 30px;
+            width: 70px;
+            border: 2px solid black
+        }
+
+        #newBTN {
+            background-color: blueviolet;
+            margin-bottom: 10px;
+        }
+    </style>
+
+
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+    <script src="../JS/ajaxCalls.js"></script>
+
+
+    <script>
+        const api = location.hostname === "localhost" || location.hostname === "127.0.0.1" ?
+            `https://localhost:7011/api/Users` :
+            `https://proj.ruppin.ac.il/cgroup61/test2/tar1/api/Users`;
+
+        const apiUpdate = location.hostname === "localhost" || location.hostname === "127.0.0.1" ?
+            `https://localhost:7011/api/Users/login` :
+            `https://proj.ruppin.ac.il/cgroup61/test2/tar1/api/Users/login`;
+
+        const vacationApi = location.hostname === "localhost" || location.hostname === "127.0.0.1" ?
+            "https://localhost:7011/api/Vacations/averagePrice" :
+            `https://proj.ruppin.ac.il/cgroup61/test2/tar1/api/Vacations/averagePrice`;
+
+        // will run when the document is ready
+        $(document).ready(function () {
+            ajaxCall("GET", api, "", getSCB, getECB);
+
+            $("#manageBTN").on("click", function () {
+                // once the document is ready we fetch a list of cars from the server
+                $("#FullData").toggle();
+            });
+
+            $("#CloseBTN").on("click", function () {
+                sessionStorage.clear();
+                window.location.href = "UserPage.html";
+            });
+
+            //handle checkbox change
+            $(document).on('change', '.statusCheckbox', function () {
+                let rowData = tbl.row($(this).closest('tr')).data();
+                let isActive_Check = this.checked;
+                let UserUpdate = {
+                    firstName: rowData.firstName,
+                    familyName: rowData.familyName,
+                    email: rowData.email,
+                    password: rowData.password,
+                    isActive: isActive_Check
+                };
+                ajaxCall("PUT", apiUpdate, JSON.stringify(UserUpdate), updateSuccess, getECB);
+
+            });
+
+            $("#generateReportBtn").click(function () {
+                // Get the selected month value
+                let selectedMonth = Number($("#monthDropdown").val());
+                if (selectedMonth == -1) {
+                    alert("Please select a valid month.");
+                    return false;
+                }
+                else {
+                    console.log(selectedMonth);
+                    ajaxCall("GET", vacationApi, { month: selectedMonth }, GetAvgVacationsSCB, getECB);
+                }
+
+            });
+        });
+
+
+        // success callback function after update
+        function updateSuccess(userData) {
+            if (userData == 1) {
+                swal("Active Status Change!", "Great Job", "success");
+            }
+        }
+
+        function GetAvgVacationsSCB(AvgList) {
+       
+            let tableBody = $("#reportTable tbody");
+            tableBody.empty(); // Clear existing rows
+
+            
+            AvgList.forEach(item => {
+                let row = `<tr><td>${item.city}</td><td>${item.averagePricePerNight}$</td></tr>`;
+                tableBody.append(row);
+            });
+
+            
+            $("#reportTable").show();
+
+            if (AvgList.length == 0) {
+                tableBody.append(`<tr><td colspan="2">No data exist for that month</td></tr>`);
+            }
+        }
+
+        // this function is activated in case of a success
+        function getSCB(Users) {
+            AllUsers = Users; // keep the Users array in a global variable;
+            try {
+                tbl = $('#UsersTable').DataTable({
+                    data: AllUsers,
+                    pageLength: 5,
+                    columns: [
+                        { data: "email" },
+                        { data: "firstName" },
+                        { data: "familyName" },
+                        { data: "password" },
+                        {
+                            data: 'isActive', title: 'Active', render: function (data, type, row, meta) {
+                                return '<input type="checkbox" class="statusCheckbox" data-userId="' + row.Id + '" ' + (data ? 'checked' : '') + '>';
+                            }
+                        },
+                    ],
+                });
+            }
+
+            catch (err) {
+                alert(err);
+            }
+        }
+
+        // this function is activated in case of a failure
+        function getECB(err) {
+            swal("Error: " + err);
+        }
+
+    </script>
+
+</head>
+<body>
+
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">Users DataBase</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <input type="button" value="manage users" class="btn btn-primary btn-lg" id="manageBTN" />
+        <input type="button" value="Log Out" class="btn btn-primary btn-lg" id="CloseBTN" />
+        <div id="FullData" hidden>
+            <table id="UsersTable" class="display nowrap" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Email</th>
+                        <th>First Name</th>
+                        <th>Family Name</th>
+                        <th>Password</th>
+                        <th>IsActive</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+        <div>
+            <nav class="navbar navbar-default">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <a class="navbar-brand" href="#">Generate Reports</a>
+                    </div>
+                </div>
+            </nav>
+            <select id="monthDropdown" class="btn btn-primary btn-m">
+                <option value="-1">Select Month</option>
+                <option value="1">January</option>
+                <option value="2">February</option>
+                <option value="3">March</option>
+                <option value="4">April</option>
+                <option value="5">May</option>
+                <option value="6">June</option>
+                <option value="7">July</option>
+                <option value="8">August</option>
+                <option value="9">September</option>
+                <option value="10">October</option>
+                <option value="11">November</option>
+                <option value="12">December</option>
+            </select>
+
+            <input type="button" value="Generate Report" class="btn btn-primary btn-m" id="generateReportBtn" />
+
+            <div id="ReportDiv" class="container">
+                <table id="reportTable" class="table table-striped" hidden>
+                    <thead>
+                        <tr>
+                            <th>City</th>
+                            <th>Average Price Per Night</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                       <!--str in here-->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,117 @@
+﻿body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    font-family: 'Jost', sans-serif;
+    background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
+}
+
+#vFormContainer {
+    width: 350px;
+    background: red;
+    overflow: hidden;
+    background: url("https://doc-08-2c-docs.googleusercontent.com/docs/securesc/68c90smiglihng9534mvqmq1946dmis5/fo0picsp1nhiucmc0l25s29respgpr4j/1631524275000/03522360960922298374/03522360960922298374/1Sx0jhdpEpnNIydS4rnN4kHSJtU1EyWka?e=view&authuser=0&nonce=gcrocepgbb17m&user=03522360960922298374&hash=tfhgbs86ka6divo3llbvp93mg4csvb38") no-repeat center/ cover;
+    border-radius: 10px;
+    box-shadow: 5px 20px 50px #000;
+    margin-right: 20px;
+}
+
+#pForm,vForm {
+    padding: 20px;
+}
+
+form-group {
+    width: 100%;
+}
+
+#RenderFlats {
+    display: flex;
+    flex-wrap: wrap;
+    max-width: calc(100% - 400px);
+}
+
+label {
+    color: #fff;
+    font-size: 1.5em;
+    display: block;
+    margin-bottom: 10px;
+}
+
+input, select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+#SumbitBTN{
+    width: 100%;
+    height: 40px;
+    background: #573b8a;
+    color: #fff;
+    font-size: 1em;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.BtnVacations {
+    width: 100%;
+    height: 40px;
+    background: rgb(240, 240, 240);
+    color: #573b8a;
+    font-size: 1em;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+    #SumbitBTN:hover {
+        background: #6d44b8;
+    }
+
+.card-body {
+    background-color: #573b8a;
+    margin: 10px;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+    box-sizing: border-box;
+    transition: background-color 0.3s ease-in-out;
+    font-family: 'Jost', sans-serif;
+    overflow: hidden; /* Ensures that the child elements don't overflow the card */
+}
+
+    .card-body:hover {
+        background-color: rgba(224, 222, 222, 1);
+    }
+
+        .card-body:hover p,
+        .card-body:hover h2,
+        .card-body:hover h3 {
+            color: black;
+        }
+
+p, h2, h3 {
+    color: white;
+    margin: 0; /* Removes default margins to ensure precise sizing */
+}
+
+/* Set a specific height for the card and make its child elements fill the height */
+.card-body {
+    height: 200px;
+    width:180px;   /* Adjust the height as needed */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+h2 {
+    flex-grow: 1; /* Makes h2 fill the available space vertically */
+}

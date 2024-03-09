@@ -1,0 +1,65 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Slide Navbar</title>
+    <!--//<link rel="stylesheet" type="text/css" href="slide navbar User.css">-->
+    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@500&display=swap" rel="stylesheet">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="../JS/ajaxCalls.js"></script>
+    <link href="../CSS/User.css" rel="stylesheet" />
+    <link href="../CSS/VacationCss.css" rel="stylesheet" />
+    <script src="../JS/User.js"></script>
+</head>
+<body>
+    <div class="main">
+        <input type="checkbox" id="chk" aria-hidden="true">
+        <div class="signup">
+            <form id="uForm">
+                <label for="chk" aria-hidden="true">Sign up</label>
+                <input type="email" name="email" placeholder="Email" required="" id="emailInput">
+                <input type="text" name="txt" placeholder="First Name" required="" id="FNInput">
+                <input type="text" name="txt" placeholder="Family Name" required="" id="LNInput">
+                <input type="password" name="pswd" placeholder="Password" required="" id="PassInput">
+                <button>Sign up</button>
+            </form>
+        </div>
+
+        <div class="login">
+            <form onsubmit="return handleLogin()">
+                <label for="chk" aria-hidden="true">Login</label>
+                <input type="email" id="loginEmail" name="email" placeholder="Email" required="">
+                <input type="password" id="loginPswd" name="pswd" placeholder="Password" required="">
+                <button type="submit">Login</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="container" id="vFormContainer" style="display:none;">
+        <form id="vForm">
+            <label class="VacLabel">Welcome to Booking.com</label>
+            <input id="InsertVacation" class="BTNcss" type="button" value="Order a Vacation" onclick="window.location.href='Flats.html'" />
+            <input id="UpdateBTN" class="BTNcss" type="button" value="Update User Details" onclick="handleUpdate()" />
+            <input id="LogoutBTN" class="BTNcss" type="button" value="Logout" onclick="handleLogout()"/>
+        </form>
+    </div>
+
+    <div class="signup" id="UpdateContainer" style="display:none;">
+        <form id="UpdateForm">
+            <label class="UpdateLabelHadder">Update User</label>
+            <label class="UpdateLabel">Email:</label>
+            <input type="email" name="email" placeholder="Email" required="" id="emailUpdate" disabled>
+            <label class="UpdateLabel">First Name:</label>
+            <input type="text" name="txt" placeholder="First Name" required="" id="NameUpdate">
+            <label class="UpdateLabel">Family Name:</label>
+            <input type="text" name="txt" placeholder="Family Name" required="" id="FamilyNameUpdate">
+            <label class="UpdateLabel">Password:</label>
+            <input type="password" name="pswd" placeholder="Password" required="" id="PasswordUpdate">
+            <button>Update User</button>
+        </form>
+    </div>
+
+</body>
+</html>
